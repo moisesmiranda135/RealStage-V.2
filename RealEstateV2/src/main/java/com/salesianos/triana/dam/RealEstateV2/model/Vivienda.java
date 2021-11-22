@@ -1,5 +1,6 @@
 package com.salesianos.triana.dam.RealEstateV2.model;
 
+import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +25,10 @@ public class Vivienda {
     private String codigoPostal;
     private String poblacion;
     private String provincia;
-    private String tipo;
+
+    @Enumerated(EnumType.STRING)
+    private tipoVivienda tipo;
+
     private Double precio;
     private int numHabitaciones;
     private double metrosCuadrados;

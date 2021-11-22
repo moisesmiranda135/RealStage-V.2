@@ -1,7 +1,11 @@
-package com.salesianos.triana.dam.RealEstateV2.model;
+package com.salesianos.triana.dam.RealEstateV2.users.models;
 
+import com.salesianos.triana.dam.RealEstateV2.model.Inmobiliaria;
+import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -14,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class Usuario implements UserDetails {
 
     @Id
@@ -30,6 +35,7 @@ public class Usuario implements UserDetails {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private Roles rol;
 
 
@@ -45,12 +51,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override

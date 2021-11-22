@@ -1,5 +1,6 @@
 package com.salesianos.triana.dam.RealEstateV2.model;
 
+import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import lombok.*;
 
 import javax.persistence.*;
