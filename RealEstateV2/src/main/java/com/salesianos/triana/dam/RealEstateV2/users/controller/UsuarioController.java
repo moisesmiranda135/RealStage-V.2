@@ -19,8 +19,8 @@ public class UsuarioController {
     private final UsuarioService usuarioEntityService;
     private final UsuarioDtoConverter usuarioDtoConverter;
 
-    @PostMapping("/auth/register")
-    public ResponseEntity<GetUsuarioDto> nuevoUsuario(@RequestBody CreateUsuarioDto newUser) {
+    @PostMapping("/auth/register/user")
+    public ResponseEntity<GetUsuarioDto> nuevoPropietario(@RequestBody CreateUsuarioDto newUser) {
         Usuario saved = usuarioEntityService.save(newUser);
 
         if (saved == null)

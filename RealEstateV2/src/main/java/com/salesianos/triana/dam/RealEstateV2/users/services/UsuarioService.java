@@ -26,7 +26,7 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
     }
 
 
-    // Este método lo mejoraremos en el próximo tema
+
     public Usuario save(CreateUsuarioDto nuevoUsuario) {
         if (nuevoUsuario.getPassword().contentEquals(nuevoUsuario.getPassword2())) {
             Usuario usuario = Usuario.builder()
@@ -35,7 +35,7 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
                     .nombre(nuevoUsuario.getNombre())
                     .apellidos(nuevoUsuario.getApeliidos())
                     .email(nuevoUsuario.getEmail())
-                    .rol(Roles.ADMIN)
+                    .rol(Roles.PROPIETARIO)
                     .build();
             return save(usuario);
         } else {
