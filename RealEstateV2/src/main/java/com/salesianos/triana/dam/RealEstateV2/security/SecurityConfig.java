@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/producto/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/auth/register/gestor").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
                 .anyRequest().authenticated();
 
