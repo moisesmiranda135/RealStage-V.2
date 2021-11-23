@@ -47,6 +47,19 @@ public class Usuario implements UserDetails {
     private Inmobiliaria inmobiliaria;
 
 
+    //HELPERS
+
+    public void addInmobiliaria(Inmobiliaria i) {
+        this.inmobiliaria = i;
+        i.getUsuarios().add(this);
+    }
+
+    public void removeInmobiliaria(Inmobiliaria i) {
+        i.getUsuarios().remove(this);
+        this.inmobiliaria = null;
+    }
+
+
 
 
     @Override
