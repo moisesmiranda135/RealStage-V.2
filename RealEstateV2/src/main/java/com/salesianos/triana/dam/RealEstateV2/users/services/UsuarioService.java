@@ -72,4 +72,20 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
         }
     }
 
+    public Usuario saveAdministrador(CreateUsuarioDto nuevoUsuario) {
+        if (nuevoUsuario.getPassword().contentEquals(nuevoUsuario.getPassword2())) {
+            Usuario usuario = Usuario.builder()
+                    .password(passwordEncoder.encode(nuevoUsuario.getPassword()))
+                    .avatar(nuevoUsuario.getAvatar())
+                    .nombre(nuevoUsuario.getNombre())
+                    .apellidos(nuevoUsuario.getApeliidos())
+                    .email(nuevoUsuario.getEmail())
+                    .rol(Roles.ADMIN)
+                    .build();
+            return save(usuario);
+        } else {
+            return null;
+        }
+    }
+
 }
