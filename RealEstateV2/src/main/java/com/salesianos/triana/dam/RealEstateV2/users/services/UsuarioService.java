@@ -37,6 +37,10 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
         return this.repositorio.findByRol(roles);
     }
 
+    public Optional<Usuario> loadUserById(Long id) throws UsernameNotFoundException{
+        return this.repositorio.findById(id);
+    }
+
 
     public Usuario save(CreateUsuarioDto nuevoUsuario) {
         if (nuevoUsuario.getPassword().contentEquals(nuevoUsuario.getPassword2())) {
