@@ -48,7 +48,7 @@ public class InmobiliariaController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Inmobiliaria.class))})})
     @GetMapping("/")
-    public ResponseEntity<?> findAll(@PageableDefault(size = 10, page = 0) Pageable pageable,
+    public ResponseEntity<?> findAll(@PageableDefault(size = 100, page = 0) Pageable pageable,
                                      HttpServletRequest request) {
 
         Page<Inmobiliaria> result = inmobiliariaService.findAll(pageable);

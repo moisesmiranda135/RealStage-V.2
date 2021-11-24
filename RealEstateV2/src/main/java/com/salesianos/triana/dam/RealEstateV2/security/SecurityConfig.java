@@ -52,12 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/propietario/{id}/").hasAnyRole("ADMIN","PROPIETARIO")
                 .antMatchers(HttpMethod.GET, "/propietario/").anonymous()
                 .antMatchers(HttpMethod.GET, "/vivienda/**").anonymous()
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/inmobiliaria").hasAnyRole("ADMIN","PROPIETARIO","GESTOR")
                 .antMatchers(HttpMethod.GET, "/inmobiliaria/**").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/register/gestor").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
 
     }
 

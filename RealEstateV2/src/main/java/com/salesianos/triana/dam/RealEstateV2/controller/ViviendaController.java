@@ -6,7 +6,10 @@ import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.ListViviendaDtoConver
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.pagination.PaginationUtilsLinks;
 import com.salesianos.triana.dam.RealEstateV2.services.ViviendaService;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -86,5 +90,41 @@ public class ViviendaController {
                             .map(dtoConverter::viviendaToGetViviendaDto)
                             .collect(Collectors.toList()));
         }
+    }
+
+
+    @Operation(summary = "Borrar inmobiliaria asociada a una vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se elimina la inmbiliaria asociada a la vivienda pero no se borra la inmobiliaria",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se a podido emcontrar la vivienda",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})})
+    @DeleteMapping("/{id}/inmobiliaria")
+    public ResponseEntity<?> deleteInmboiliariaAsociada(
+            @Parameter(description = "ID de la vivienda a buscar")
+            @PathVariable Long id,
+            @AuthenticationPrincipal Usuario user) {
+
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+
+        if (vivienda.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }else if (user.getRol().equals(Roles.ADMIN)  ||
+                (user.getRol().equals(Roles.PROPIETARIO) && vivienda.get().getUsuario().getId().equals(user.getId())) ||
+                (user.getRol().equals(Roles.GESTOR)&& vivienda.get().getInmobiliaria().getId().equals(user.getInmobiliaria().getId()))) {
+            vivienda.map(v -> {
+                v.setInmobiliaria(null);
+                viviendaService.save(v);
+                return ResponseEntity.noContent().build();
+
+            });
+        }else {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
