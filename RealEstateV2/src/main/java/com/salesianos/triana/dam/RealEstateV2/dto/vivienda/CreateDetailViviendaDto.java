@@ -1,16 +1,17 @@
 package com.salesianos.triana.dam.RealEstateV2.dto.vivienda;
 
 import com.salesianos.triana.dam.RealEstateV2.model.TipoVivienda;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-@Builder
-public class GetDetailViviendaDto {
+@NoArgsConstructor
+public class CreateDetailViviendaDto {
 
     private Long id;
+
     private String titulo;
     private String descripcion;
     private String avatar;
@@ -27,6 +28,5 @@ public class GetDetailViviendaDto {
     private boolean tienePiscina;
     private boolean tieneAscensor;
     private boolean tieneGaraje;
-    private String nombre_propietario;
-    private String avatar_propietario;
+    private Long propietario_id;
 }

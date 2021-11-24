@@ -1,5 +1,7 @@
 package com.salesianos.triana.dam.RealEstateV2.controller;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.DetailDtoConverter;
+import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetDetailViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.services.ViviendaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ViviendaController {
 
     private final ViviendaService viviendaService;
+    private final DetailDtoConverter detailDtoConverter;
 
     @Operation(summary = "Optiene los detalles de la vivienda elegida por el usuario")
     @ApiResponses(value = {
@@ -30,6 +33,6 @@ public class ViviendaController {
     @GetMapping("/{id}")
     public ResponseEntity<GetDetailViviendaDto> findOne(@PathVariable Long id) {
         return ResponseEntity
-                .ok(detaildtoConverter.viviendaToGetViviendaDto(viviendaService.findById(id).get()));
+                .ok(detailDtoConverter.viviendaToGetViviendaDto(viviendaService.findById(id).get()));
     }
 }

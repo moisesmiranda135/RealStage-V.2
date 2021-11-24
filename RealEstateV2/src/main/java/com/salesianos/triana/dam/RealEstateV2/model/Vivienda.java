@@ -27,7 +27,7 @@ public class Vivienda {
     private String provincia;
 
     @Enumerated(EnumType.STRING)
-    private tipoVivienda tipo;
+    private TipoVivienda tipo;
 
     private Double precio;
     private int numHabitaciones;
@@ -42,4 +42,47 @@ public class Vivienda {
 
     @ManyToOne
     private Usuario usuario;
+
+
+    //Constructores
+
+    public Vivienda(Long id, String titulo, String avatar, String codigoPostal, String provincia, TipoVivienda tipo, Double precio,
+                    int numHabitaciones, double metrosCuadrados, int numBanyos, boolean tienePiscina,
+                    boolean tieneAscensor, boolean tieneGaraje) {
+        this.id = id;
+        this.titulo = titulo;
+        this.avatar = avatar;
+        this.codigoPostal = codigoPostal;
+        this.provincia = provincia;
+        this.tipo = tipo;
+        this.precio = precio;
+        this.numHabitaciones = numHabitaciones;
+        this.metrosCuadrados = metrosCuadrados;
+        this.numBanyos = numBanyos;
+        this.tienePiscina = tienePiscina;
+        this.tieneAscensor = tieneAscensor;
+        this.tieneGaraje = tieneGaraje;
+    }
+
+    public Vivienda(Long id, String titulo, String descripcion, String avatar, String latlng, String direccion, String codigoPostal,
+                    String poblacion, String provincia, TipoVivienda tipo, Double precio, int numHabitaciones, double metrosCuadrados,
+                    int numBanyos, boolean tienePiscina, boolean tieneAscensor, boolean tieneGaraje) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.avatar = avatar;
+        this.latlng = latlng;
+        this.direccion = direccion;
+        this.codigoPostal = codigoPostal;
+        this.poblacion = poblacion;
+        this.provincia = provincia;
+        this.tipo = tipo;
+        this.precio = precio;
+        this.numHabitaciones = numHabitaciones;
+        this.metrosCuadrados = metrosCuadrados;
+        this.numBanyos = numBanyos;
+        this.tienePiscina = tienePiscina;
+        this.tieneAscensor = tieneAscensor;
+        this.tieneGaraje = tieneGaraje;
+    }
 }

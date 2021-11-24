@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/propietario/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/vivienda/**").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/register/gestor").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
                 .anyRequest().authenticated();
