@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service("usuarioDetailsService")
@@ -31,6 +32,10 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
                 .orElseThrow(()-> new UsernameNotFoundException(email + " no encontrado"));
     }
 
+
+    public List<Usuario> loadUserByRole(Roles roles) throws UsernameNotFoundException{
+        return this.repositorio.findByRoles(roles);
+    }
 
 
     public Usuario save(CreateUsuarioDto nuevoUsuario) {
