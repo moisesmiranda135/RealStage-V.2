@@ -104,10 +104,12 @@ public class ViviendaController {
                                     @PathVariable Long id,
                                     @AuthenticationPrincipal Usuario user) {
 
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
 
         if (viviendaService.findById(id).isEmpty()){
             return ResponseEntity.notFound().build();
-        }else if (user.getRol().equals(Roles.ADMIN) || id.equals(user.getId())) {
+        }else if (user.getRol().equals(Roles.ADMIN) ||
+                    (user.getRol().equals(Roles.PROPIETARIO) && vivienda.get().getUsuario().getId().equals(user.getId()))) {
             viviendaService.deleteById(id);
             return ResponseEntity.noContent().build();
         }else {
