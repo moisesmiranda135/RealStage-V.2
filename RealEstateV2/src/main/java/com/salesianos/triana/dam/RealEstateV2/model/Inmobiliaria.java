@@ -32,4 +32,13 @@ public class Inmobiliaria implements Serializable {
     @OneToMany(mappedBy ="inmobiliaria")
     private List<Usuario> usuarios = new ArrayList<>();
 
+
+    //CONTRUCTORES
+
+    public Inmobiliaria(String nombre, String email, String telefono) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+    }
+
 }

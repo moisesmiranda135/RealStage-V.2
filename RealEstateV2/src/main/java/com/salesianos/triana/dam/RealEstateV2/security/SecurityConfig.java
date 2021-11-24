@@ -51,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/propietario/**").anonymous()
                 .antMatchers(HttpMethod.GET, "/vivienda/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/inmobiliaria/**").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/register/gestor").anonymous()
                 .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
                 .anyRequest().authenticated();
