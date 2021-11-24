@@ -26,7 +26,7 @@ public class InmobiliariaDtoConverter {
                 .email(i.getEmail())
                 .titulo_vivienda(i.getViviendas().get(id).getTitulo())
                 .avatar_vivienda((i.getViviendas().get(id).getAvatar()))
-                .precio_vivienda(i.getViviendas().get(id).getAvatar())
+                .precio_vivienda(i.getViviendas().get(id).getPrecio())
                 .build();
 
     }

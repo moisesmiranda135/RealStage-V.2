@@ -15,7 +15,7 @@ public class GetInmobiliariaDto {
     private String email;
     private String titulo_vivienda;
     private String avatar_vivienda;
-    private String precio_vivienda;
+    private double precio_vivienda;
 
 
 
