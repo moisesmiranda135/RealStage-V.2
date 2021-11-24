@@ -1,12 +1,16 @@
 package com.salesianos.triana.dam.RealEstateV2.controller;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.DetailDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetDetailViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.ListViviendaDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.pagination.PaginationUtilsLinks;
 import com.salesianos.triana.dam.RealEstateV2.services.ViviendaService;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,10 +20,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -85,6 +91,28 @@ public class ViviendaController {
                     .body(result.stream()
                             .map(dtoConverter::viviendaToGetViviendaDto)
                             .collect(Collectors.toList()));
+        }
+    }
+
+
+    @Operation(summary = "Borra una vivienda")
+    @ApiResponse(responseCode = "204",
+            description = "La vivienda se ha borrado correctamente",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Vivienda.class))})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@Parameter(description = "ID de la vivienda a borrar")
+                                    @PathVariable Long id,
+                                    @AuthenticationPrincipal Usuario user) {
+
+
+        if (viviendaService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else if (user.getRol().equals(Roles.ADMIN) || id.equals(user.getId())) {
+            viviendaService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.noContent().build();
         }
     }
 }
