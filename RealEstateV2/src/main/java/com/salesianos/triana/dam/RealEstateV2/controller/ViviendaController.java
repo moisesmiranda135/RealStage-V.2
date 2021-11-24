@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -114,5 +113,41 @@ public class ViviendaController {
         }else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+
+    @Operation(summary = "Borrar inmobiliaria asociada a una vivienda")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "Se elimina la inmbiliaria asociada a la vivienda pero no se borra la inmobiliaria",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "No se a podido emcontrar la vivienda",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})})
+    @DeleteMapping("/{id}/inmobiliaria")
+    public ResponseEntity<?> deleteInmboiliariaAsociada(
+            @Parameter(description = "ID de la vivienda a buscar")
+            @PathVariable Long id,
+            @AuthenticationPrincipal Usuario user) {
+
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+
+        if (vivienda.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }else if (user.getRol().equals(Roles.ADMIN)  ||
+                (user.getRol().equals(Roles.PROPIETARIO) && vivienda.get().getUsuario().getId().equals(user.getId())) ||
+                (user.getRol().equals(Roles.GESTOR)&& vivienda.get().getInmobiliaria().getId().equals(user.getInmobiliaria().getId()))) {
+            vivienda.map(v -> {
+                v.setInmobiliaria(null);
+                viviendaService.save(v);
+                return ResponseEntity.noContent().build();
+
+            });
+        }else {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }
