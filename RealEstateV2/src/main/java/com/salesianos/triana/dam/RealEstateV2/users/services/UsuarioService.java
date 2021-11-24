@@ -34,7 +34,7 @@ public class UsuarioService extends BaseService<Usuario, Long, UsuarioRepository
 
 
     public List<Usuario> loadUserByRole(Roles roles) throws UsernameNotFoundException{
-        return this.repositorio.findByRoles(roles);
+        return this.repositorio.findByRol(roles);
     }
 
 

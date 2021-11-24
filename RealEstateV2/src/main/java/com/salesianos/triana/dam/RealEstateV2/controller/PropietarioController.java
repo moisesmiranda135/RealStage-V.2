@@ -1,5 +1,7 @@
 package com.salesianos.triana.dam.RealEstateV2.controller;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioDto;
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.PropietarioDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import com.salesianos.triana.dam.RealEstateV2.users.services.UsuarioService;
@@ -36,15 +38,22 @@ public class PropietarioController {
                     content = @Content),
     })
     @GetMapping("")
-    public ResponseEntity<List<Usuario>> findAll(){
+    public ResponseEntity<List<GetPropietarioDto>> findAll(){
         List<Usuario> data = usuarioEntityService.loadUserByRole(Roles.PROPIETARIO);
 
         if (data.isEmpty()){
             return ResponseEntity.notFound().build();
         }else{
-            List<Usuario> lista = data.stream().collect(Collectors.toList());
+            List<GetPropietarioDto> result =
+                    data.stream()
+                            .map(PropietarioDtoConverter::propietarioToGetPropietarioDto)
+                            .collect(Collectors.toList());
 
-            return ResponseEntity.ok().body(lista);
+            return ResponseEntity.ok().body(result);
         }
     }
+
+
+
+
 }
