@@ -4,9 +4,11 @@ package com.salesianos.triana.dam.RealEstateV2.services;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.repos.ViviendaRepository;
 import com.salesianos.triana.dam.RealEstateV2.services.base.BaseService;
+import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,6 +20,8 @@ import java.util.Optional;
 
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
+
+
 
     public Page<Vivienda> findByArgs(final Optional<String> tipo,
                                      final Optional<String> ciudad,

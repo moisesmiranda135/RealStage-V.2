@@ -1,5 +1,6 @@
 package com.salesianos.triana.dam.RealEstateV2.controller;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.DetailDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetDetailViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.ListViviendaDtoConverter;
@@ -89,6 +90,30 @@ public class ViviendaController {
                     .body(result.stream()
                             .map(dtoConverter::viviendaToGetViviendaDto)
                             .collect(Collectors.toList()));
+        }
+    }
+
+
+    @Operation(summary = "Borra una vivienda")
+    @ApiResponse(responseCode = "204",
+            description = "La vivienda se ha borrado correctamente",
+            content = {@Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Vivienda.class))})
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@Parameter(description = "ID de la vivienda a borrar")
+                                    @PathVariable Long id,
+                                    @AuthenticationPrincipal Usuario user) {
+
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+
+        if (viviendaService.findById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else if (user.getRol().equals(Roles.ADMIN) ||
+                    (user.getRol().equals(Roles.PROPIETARIO) && vivienda.get().getUsuario().getId().equals(user.getId()))) {
+            viviendaService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.noContent().build();
         }
     }
 
