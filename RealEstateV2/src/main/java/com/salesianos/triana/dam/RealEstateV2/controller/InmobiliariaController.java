@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -122,6 +123,25 @@ public class InmobiliariaController {
         inmobiliariaService.deleteById(id);
         return ResponseEntity.noContent().build();
 
+    }
+
+
+    @Operation(summary = "Crea una nueva inmobiliaria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado la inmobiliaria correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha podido crear la inmobiliaria",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))})
+    })
+    @PostMapping("/")
+    public ResponseEntity<Inmobiliaria> add(@RequestBody Inmobiliaria nueva){
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(inmobiliariaService.save(nueva));
     }
 
 
