@@ -17,10 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +66,19 @@ public class InmobiliariaController {
         }
 
     }
+
+
+    @Operation(summary = "Optiene los detalles de la inmobiliaria elegida por el usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la inmobiliaria correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))})})
+    @GetMapping("/{id}")
+    public ResponseEntity<GetInmobiliariaDto> findOne(@PathVariable Long id) {
+        return ResponseEntity.ok(inmobiliariaDtoConverter.inmobiliariaToGetInmobiliariaDto(inmobiliariaService.findById(id).get()));
+    }
+
 
 
 }
