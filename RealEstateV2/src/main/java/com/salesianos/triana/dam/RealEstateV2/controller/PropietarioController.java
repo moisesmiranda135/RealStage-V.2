@@ -3,6 +3,7 @@ package com.salesianos.triana.dam.RealEstateV2.controller;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.PropietarioDtoConverter;
+import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import com.salesianos.triana.dam.RealEstateV2.users.services.UsuarioService;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/propietario")
 @RequiredArgsConstructor
+@Tag(name = "propietario",description = "Controlador para propietarios")
 public class PropietarioController {
 
     private final UsuarioService usuarioEntityService;
@@ -41,6 +44,10 @@ public class PropietarioController {
             @ApiResponse(responseCode = "404",
                     description = "No se han encontrado los propietarios",
                     content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
     })
     @GetMapping("/")
     public ResponseEntity<List<GetPropietarioDto>> findAll(){
@@ -65,6 +72,10 @@ public class PropietarioController {
                     description = "Se han encontrado los propietarios",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
             @ApiResponse(responseCode = "403",
                     description = "No tienes permisos para esta petición",
                     content = @Content),

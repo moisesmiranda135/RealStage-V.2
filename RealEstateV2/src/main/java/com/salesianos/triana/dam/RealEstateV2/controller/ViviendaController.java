@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/vivienda/")
 @RequiredArgsConstructor
+@Tag(name = "vivienda",description = "Controlador para viviendas")
 public class ViviendaController {
 
     private final ViviendaService viviendaService;
@@ -47,7 +49,12 @@ public class ViviendaController {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado la vivienda correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Vivienda.class))})})
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
+    })
     @GetMapping("/{id}")
     public ResponseEntity<GetDetailViviendaDto> findOne(@PathVariable Long id) {
         return ResponseEntity
@@ -62,6 +69,10 @@ public class ViviendaController {
                             schema = @Schema(implementation = Vivienda.class))}),
             @ApiResponse(responseCode = "400",
                     description = "No se ha encontrado la lista de viviendas",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Vivienda.class))})
     })
@@ -99,10 +110,19 @@ public class ViviendaController {
 
 
     @Operation(summary = "Borra una vivienda")
-    @ApiResponse(responseCode = "204",
-            description = "La vivienda se ha borrado correctamente",
-            content = {@Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Vivienda.class))})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "La vivienda se ha borrado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "No tienes permisos para esta petición",
+                    content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@Parameter(description = "ID de la vivienda a borrar")
                                     @PathVariable Long id,
@@ -117,7 +137,7 @@ public class ViviendaController {
             viviendaService.deleteById(id);
             return ResponseEntity.noContent().build();
         }else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(403).build();
         }
     }
 
@@ -131,7 +151,15 @@ public class ViviendaController {
             @ApiResponse(responseCode = "404",
                     description = "No se a podido emcontrar la vivienda",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Vivienda.class))})})
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "No tienes permisos para esta petición",
+                    content = @Content)
+    })
     @DeleteMapping("/{id}/inmobiliaria")
     public ResponseEntity<?> deleteInmboiliariaAsociada(
             @Parameter(description = "ID de la vivienda a buscar")
@@ -152,9 +180,9 @@ public class ViviendaController {
 
             });
         }else {
-            return ResponseEntity.status(403).build();
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(403).build();
     }
 
 
@@ -169,7 +197,14 @@ public class ViviendaController {
             @ApiResponse(responseCode = "400",
                     description = "No se ha podido crear la inmobiliaria",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Vivienda.class))})
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "No tienes permisos para esta petición",
+                    content = @Content),
     })
     @PostMapping("/{id}/inmobiliaria/{id2}")
     public ResponseEntity<Vivienda> addViviendaToInmobiliaria(@PathVariable Long id,
@@ -190,7 +225,7 @@ public class ViviendaController {
                     .status(HttpStatus.CREATED)
                     .build();
         }else {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(403).build();
         }
 
     }

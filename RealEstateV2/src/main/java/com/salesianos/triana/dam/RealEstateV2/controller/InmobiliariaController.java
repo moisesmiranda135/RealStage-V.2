@@ -49,7 +49,12 @@ public class InmobiliariaController {
             @ApiResponse(responseCode = "400",
                     description = "No se ha encontrado ninguna Inmobiliaria",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Inmobiliaria.class))})})
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
+    })
     @GetMapping("/")
     public ResponseEntity<?> findAll(@PageableDefault(size = 100, page = 0) Pageable pageable,
                                      HttpServletRequest request) {
@@ -79,7 +84,11 @@ public class InmobiliariaController {
             @ApiResponse(responseCode = "200",
                     description = "Se ha encontrado la inmobiliaria correctamente",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Inmobiliaria.class))})})
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})})
     @GetMapping("/{id}")
     public ResponseEntity<GetInmobiliariaDto> findOne(@PathVariable Long id) {
         return ResponseEntity.ok(inmobiliariaDtoConverter.inmobiliariaToGetInmobiliariaDto(inmobiliariaService.findById(id).get()));
@@ -93,13 +102,18 @@ public class InmobiliariaController {
                     description = "No content",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = Inmobiliaria.class))}),
-
-
             @ApiResponse(responseCode = "404",
                     description = "No se ha encontrado la inmobiliaria indicada",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Inmobiliaria.class))})})
-
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "No tienes permisos para esta petición",
+                    content = @Content),
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id)
     {
@@ -135,7 +149,11 @@ public class InmobiliariaController {
             @ApiResponse(responseCode = "400",
                     description = "No se ha podido crear la inmobiliaria",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Inmobiliaria.class))})
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
     })
     @PostMapping("/")
     public ResponseEntity<Inmobiliaria> add(@RequestBody Inmobiliaria nueva){

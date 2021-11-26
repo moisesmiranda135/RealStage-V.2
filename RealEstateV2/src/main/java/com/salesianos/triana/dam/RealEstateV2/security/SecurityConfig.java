@@ -51,15 +51,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/propietario/{id}/").hasAnyRole("ADMIN","PROPIETARIO")
                 .antMatchers(HttpMethod.GET, "/propietario/").authenticated()
+
                 .antMatchers(HttpMethod.GET, "/vivienda/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/vivienda/**").hasAnyRole("ADMIN","PROPIETARIO")
                 .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/inmobiliaria").hasAnyRole("ADMIN","PROPIETARIO","GESTOR")
+
                 .antMatchers(HttpMethod.GET, "/inmobiliaria/{id}/").authenticated()
                 .antMatchers(HttpMethod.GET, "/inmobiliaria/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/inmobiliaria/").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}/").authenticated()
-                .antMatchers(HttpMethod.POST, "/auth/register/gestor").anonymous()
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}/").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, "/auth/register/gestor").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/auth/**").anonymous()
+
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
