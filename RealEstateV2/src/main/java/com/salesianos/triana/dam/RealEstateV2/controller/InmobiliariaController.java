@@ -145,5 +145,41 @@ public class InmobiliariaController {
     }
 
 
+/*
+    @Operation(summary = "Obtiene los gestores de una inmobiliaira")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha encontrado la lista ",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha encontrado ningun Gestor",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Inmobiliaria.class))})})
+    @GetMapping("/{id}/gestor/")
+    public ResponseEntity<?> findInmobiliariaAllGestors(@PathVariable Long id,
+                                                        @PageableDefault(size = 100, page = 0) Pageable pageable,
+                                                        HttpServletRequest request) {
+
+        Page<Inmobiliaria> result = inmobiliariaService.findAll(pageable);
+
+        if (inmobiliariaService.findAll().isEmpty()) {
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } else {
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                    .fromHttpUrl(request.getRequestURL().toString());
+            return ResponseEntity
+                    .ok()
+                    .header("link", paginationUtilsLinks.createLinkHeader(result, uriBuilder))
+                    .body(result.stream()
+                            .map(Inmobiliaria::getUsuarios)
+                            .collect(Collectors.toList()));
+        }
+
+    }
+
+*/
 
 }
