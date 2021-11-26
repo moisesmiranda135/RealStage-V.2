@@ -64,7 +64,7 @@ Para el correcto manejo de cada entidad contamos con las siguientes clases:
 
 Por otro lado, para el correcto manejo de las asociaciones entre entidades, se han creado diferentes DTOs (Data Transfer Object); estos nos permiten crear nuevos objetos con los atributos de las entidades que más nos interesen.
 
-También en la carpeta controller tenemos las distintas peticiones, que tenemos incluidas en postman. En la documentación de swagger situada en la parte superior de cada petición, esta defínido que función realiza y que respuestas puede devolver.
+También en la carpeta controller tenemos las distintas peticiones, que tenemos incluidas en postman. En la documentación de swagger situada en la parte superior de cada petición, esta definido que función realiza y que respuestas puede devolver.
 
 Por otro lado tenemos la carpeta security en la que añadimos todo lo necesario para añadir la seguridad a nuestra API, una de las clases a mirar es SecurityConfig, en la que sepuede ver los permisos añadidos a cada petición.
 
