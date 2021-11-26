@@ -4,8 +4,10 @@ import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioVivi
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.DetailDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetDetailViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.ListViviendaDtoConverter;
+import com.salesianos.triana.dam.RealEstateV2.model.Inmobiliaria;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.pagination.PaginationUtilsLinks;
+import com.salesianos.triana.dam.RealEstateV2.services.InmobiliariaService;
 import com.salesianos.triana.dam.RealEstateV2.services.ViviendaService;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,7 @@ public class ViviendaController {
     private final DetailDtoConverter detailDtoConverter;
     private final PaginationUtilsLinks paginationUtilsLinks;
     private final ListViviendaDtoConverter dtoConverter;
+    private final InmobiliariaService inmobiliariaService;
 
     @Operation(summary = "Optiene los detalles de la vivienda elegida por el usuario")
     @ApiResponses(value = {
@@ -151,5 +155,43 @@ public class ViviendaController {
             return ResponseEntity.status(403).build();
         }
         return ResponseEntity.noContent().build();
+    }
+
+
+
+
+    @Operation(summary = "Asignar vivienda a una inmobiliaria")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",
+                    description = "Se ha creado la inmobiliaria correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se ha podido crear la inmobiliaria",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))})
+    })
+    @PostMapping("/{id}/inmobiliaria/{id2}")
+    public ResponseEntity<Vivienda> addViviendaToInmobiliaria(@PathVariable Long id,
+                                                              @PathVariable Long id2,
+                                                              @AuthenticationPrincipal Usuario user){
+
+        Optional<Vivienda> vivienda = viviendaService.findById(id);
+        Optional<Inmobiliaria> inmobiliaria = inmobiliariaService.findById(id2);
+
+
+        if (vivienda.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else if (user.getRol().equals(Roles.ADMIN) ||
+                (user.getRol().equals(Roles.PROPIETARIO) && vivienda.get().getUsuario().getId().equals(user.getId()))) {
+            vivienda.get().setInmobiliaria(inmobiliaria.get());
+            viviendaService.save(vivienda.get());
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .build();
+        }else {
+            return ResponseEntity.noContent().build();
+        }
+
     }
 }
