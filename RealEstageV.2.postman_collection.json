@@ -1,0 +1,593 @@
+{
+	"info": {
+		"_postman_id": "70b58542-45a7-424f-b88c-75e54d2f8a7d",
+		"name": "RealEstageV.2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Dar alta a Propietario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Antonio\",\r\n    \"avatar\":\"s\",\r\n    \"apellidos\":\"Torres Luque\",\r\n    \"email\":\"antoniotores@triana.salesianos.edu\",\r\n    \"password\":\"12345\",\r\n    \"password2\":\"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/auth/register/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auth",
+								"register",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.collectionVariables.set(\"Admintoken\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"moisesmiranda135@gmail.com\",\r\n    \"password\":\"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Propietario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"antoniotores@triana.salesianos.edu\",\r\n    \"password\":\"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar de alta Gestor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admintoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"Rafael\",\r\n    \"avatar\": \"\",\r\n    \"apellidos\": \"Villar Liñan\",\r\n    \"direccion\": \"Calle Torre del Oro n2\",\r\n    \"email\": \"rafavillar@triana.salesianos.edu\",\r\n    \"password\": \"12345\",\r\n    \"password2\": \"12345\",\r\n    \"telefono\": \"662452321\",\r\n    \"inmobiliaria\": \"1\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/auth/register/gestor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auth",
+								"register",
+								"gestor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar de alta Administrador",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\":\"Moisés\",\r\n    \"avatar\":\"s\",\r\n    \"apellidos\":\"Miranda Corrales\",\r\n    \"email\":\"moisesmiranda135@gmail.com\",\r\n    \"password\":\"12345\",\r\n    \"password2\":\"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/auth/register/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"auth",
+								"register",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Propietarios",
+			"item": [
+				{
+					"name": "Listar Todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/propietario/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"propietario",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzg2NDQxNCwibm9tYnJlIjoiTW9pc8OpcyIsInJvbCI6IlBST1BJRVRBUklPIn0.G8KFPMlQ-iDgrHdtES6vn5R3sraOwqRXOWeI6P7q5c0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/propietario/86/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"propietario",
+								"86",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar Propietario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzk3MjMwOSwibm9tYnJlIjoiTW9pc8OpcyIsInJvbCI6IkFETUlOIn0.G2zmNIxsJMDp8hprRo_dWmu4A22cHK1-L4FF6y65ejw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/propietario/16/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"propietario",
+								"16",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vivienda",
+			"item": [
+				{
+					"name": "Mostrar por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/vivienda/9/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								"9",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar Vivienda",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admintoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titulo\": \"vivienda modificada\",\r\n    \"descripcion\": \"descripción modificada\",\r\n    \"avatar\": \"avatar modificado\",\r\n    \"latlng\": null,\r\n    \"direccion\": null,\r\n    \"codigoPostal\": null,\r\n    \"poblacion\": null,\r\n    \"provincia\": null,\r\n    \"tipo\": null,\r\n    \"precio\": null,\r\n    \"numHabitaciones\": 0,\r\n    \"metrosCuadrados\": 0.0,\r\n    \"numBanyos\": 0,\r\n    \"tienePiscina\": false,\r\n    \"tieneAscensor\": false,\r\n    \"tieneGaraje\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/vivienda/1/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar todas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Admintoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/vivienda/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar Vivienda",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/vivienda/3/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Borrar Inmobiliaria Asociada",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzg3Mzg0NSwibm9tYnJlIjoiQW50b25pbyIsImFwZWxsaWRvcyI6IlRvcnJlcyBMdXF1ZSIsInJvbCI6IkdFU1RPUiJ9.yM6E_JoYKaqxSMPXroguXkUpd0P3AsDWobL3XQeS3rs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/vivienda/52/inmobiliaria",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								"52",
+								"inmobiliaria"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Establecer inmobiliaria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzk3NDM2Miwibm9tYnJlIjoiTW9pc8OpcyIsInJvbCI6IkFETUlOIn0.7YShMJkVpFFjabzabqsNvzn3eVtz8UN1zNzIoPdCf-I",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/vivienda/1/inmobiliaria/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"vivienda",
+								"1",
+								"inmobiliaria",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inmobiliaria",
+			"item": [
+				{
+					"name": "Listar todas",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/inmobiliaria/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"inmobiliaria",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar por id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzkyMzQ3Miwibm9tYnJlIjoiQW50b25pbyIsImFwZWxsaWRvcyI6IlRvcnJlcyBMdXF1ZSIsInJvbCI6IkdFU1RPUiJ9.EJUkIDFcDSTDgcMqPNM7fvWWJRwtC_BLV_7FRCjVq0U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/inmobiliaria/7/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"inmobiliaria",
+								"7",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Inmobiliaria",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9000/inmobiliaria/1/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"inmobiliaria",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Nueva",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4NiIsImlhdCI6MTYzNzk3MDgyMSwibm9tYnJlIjoiTW9pc8OpcyIsInJvbCI6IkFETUlOIn0.PawSDefMT28OzfQWnW6-hId4X8YhRVw42eC1KURiNjQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"inmobiliariaPrueba@triana.salesianos.edu\",\r\n    \"nombre\":\"inmobiliara de prueba\",\r\n    \"telefono\":\"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9000/inmobiliaria/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9000",
+							"path": [
+								"inmobiliaria",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "Admintoken",
+			"value": ""
+		}
+	]
+}
