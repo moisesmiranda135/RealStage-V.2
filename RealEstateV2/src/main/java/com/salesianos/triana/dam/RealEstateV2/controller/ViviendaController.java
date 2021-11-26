@@ -229,4 +229,63 @@ public class ViviendaController {
         }
 
     }
+
+
+    @Operation(summary = "Puede editar una vivienda concreta")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Se ha editado y guardado correctamente",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "400",
+                    description = "No se a podido editar o no se pudo encontrar",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "401",
+                    description = "El usuario no está autorizado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Vivienda.class))}),
+            @ApiResponse(responseCode = "403",
+                    description = "No tienes permisos para esta petición",
+                    content = @Content),
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<Vivienda> edit(@RequestBody Vivienda vivienda,
+                                         @Parameter(description = "ID de la vivienda a buscar")
+                                         @PathVariable Long id,
+                                         @AuthenticationPrincipal Usuario user) {
+
+        Optional<Vivienda> vivienda1 = viviendaService.findById(id);
+
+        if (vivienda1.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else if (user.getRol().equals(Roles.ADMIN) ||
+                (user.getRol().equals(Roles.PROPIETARIO) && vivienda1.get().getUsuario().getId().equals(user.getId()))) {
+            return ResponseEntity.of(
+                    viviendaService.findById(id).map(v -> {
+                        v.setTitulo(vivienda.getTitulo());
+                        v.setDescripcion(vivienda.getDescripcion());
+                        v.setAvatar(vivienda.getAvatar());
+                        v.setLatlng(vivienda.getLatlng());
+                        v.setCodigoPostal(vivienda.getCodigoPostal());
+                        v.setDireccion(vivienda.getDireccion());
+                        v.setPoblacion(vivienda.getPoblacion());
+                        v.setProvincia(vivienda.getProvincia());
+                        v.setTipo(vivienda.getTipo());
+                        v.setPrecio(vivienda.getPrecio());
+                        v.setNumHabitaciones(vivienda.getNumHabitaciones());
+                        v.setMetrosCuadrados(vivienda.getMetrosCuadrados());
+                        v.setNumBanyos(vivienda.getNumBanyos());
+                        v.setTienePiscina(vivienda.isTienePiscina());
+                        v.setTieneAscensor(vivienda.isTieneAscensor());
+                        v.setTieneGaraje(vivienda.isTieneGaraje());
+                        viviendaService.save(v);
+                        return v;
+                    })
+            );
+        }else {
+            return ResponseEntity.status(403).build();
+        }
+
+    }
 }
