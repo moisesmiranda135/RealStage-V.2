@@ -44,6 +44,22 @@ public class Vivienda {
     private Usuario usuario;
 
 
+
+    //HELPERS PROPIETARIO
+    //**************************************************
+
+    public void addToPropietario(Usuario p){
+        this.usuario = p;
+        p.getListaviviendas().add(this);
+    }
+
+    public void deleteFromPropietario(Usuario p){
+        p.getListaviviendas().remove(this);
+        this.usuario = null;
+    }
+
+
+
     //Constructores
 
     public Vivienda(Long id, String titulo, String avatar, String codigoPostal, String provincia, TipoVivienda tipo, Double precio,

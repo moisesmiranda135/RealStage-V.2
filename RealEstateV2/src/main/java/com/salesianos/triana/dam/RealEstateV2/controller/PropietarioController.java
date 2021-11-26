@@ -3,6 +3,7 @@ package com.salesianos.triana.dam.RealEstateV2.controller;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.PropietarioDtoConverter;
+import com.salesianos.triana.dam.RealEstateV2.services.ViviendaService;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Roles;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import com.salesianos.triana.dam.RealEstateV2.users.services.UsuarioService;
@@ -14,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,6 +29,7 @@ public class PropietarioController {
 
     private final UsuarioService usuarioEntityService;
     private final PropietarioDtoConverter propietarioDtoConverter;
+    private final ViviendaService viviendaService;
 
     @Operation(summary = "Obtiene todos los propietarios creados")
     @ApiResponses(value = {
@@ -79,6 +78,45 @@ public class PropietarioController {
                     .map(propietarioDtoConverter::propietarioToGetPropietarioViviendaDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok().body(propietarioDto);
+        }else {
+            return ResponseEntity.status(403).build();
+        }
+    }
+
+
+
+    @Operation(summary = "Borra un propietario previamente creado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204",
+                    description = "No content",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class))}),
+
+
+            @ApiResponse(responseCode = "404",
+                    description = "No se ha encontrado el propietario indicado",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class))})
+    })
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deletePropietario(@PathVariable Long id, HttpServletRequest request, @AuthenticationPrincipal Usuario user) {
+
+        Optional<Usuario> propietario = usuarioEntityService.loadUserById(id);
+        if (propietario.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else if (user.getRol().equals(Roles.ADMIN) ||
+                propietario.get().getRol().equals(user.getRol()) && propietario.get().getId().equals(user.getId())) {
+            Usuario propietario1 = usuarioEntityService.findById(id).get();
+            viviendaService
+                    .findAll()
+                    .stream()
+                    .map(vivienda -> {
+                        vivienda.deleteFromPropietario(propietario1);
+                        return vivienda;
+                    })
+                    .forEach(viviendaService::save);
+            usuarioEntityService.deleteById(id);
+            return ResponseEntity.noContent().build();
         }else {
             return ResponseEntity.status(403).build();
         }
