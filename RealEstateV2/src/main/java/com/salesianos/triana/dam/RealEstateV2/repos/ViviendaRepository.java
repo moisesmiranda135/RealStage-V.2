@@ -1,5 +1,6 @@
 package com.salesianos.triana.dam.RealEstateV2.repos;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetViviendasPropietarioDto;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.users.models.Usuario;
 import org.springframework.data.domain.Page;
@@ -19,11 +20,12 @@ public interface ViviendaRepository extends JpaRepository<Vivienda, Long> {
 
     @Query("""
             select new com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetViviendasPropietarioDto(
-                v.id, v.titulo, v.avatar
+                v.id, v.titulo, v.avatar, v.codigoPostal, v.provincia, v.tipo, v.precio, v.numHabitaciones, v.metrosCuadrados,
+                v.numBanyos, v.tienePiscina, v.tieneAscensor, v.tieneGaraje
             )
-            from Vivienda 
-            where v.usuario = :u
+            from Vivienda v
+            where v.usuario.id = :id
             """)
-    List<Vivienda> findByUsuario(@Param("u") Usuario u);
+    List<GetViviendasPropietarioDto> findByUsuario(Long id);
 
 }

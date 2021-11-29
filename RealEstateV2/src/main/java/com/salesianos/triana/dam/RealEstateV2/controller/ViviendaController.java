@@ -292,17 +292,15 @@ public class ViviendaController {
 
 
     @GetMapping("/propietario")
-    public ResponseEntity<?> findViviendaPropietario(@AuthenticationPrincipal Usuario user) {
+    public ResponseEntity<List<GetViviendasPropietarioDto>> findViviendaPropietario(@AuthenticationPrincipal Usuario user) {
 
-        List<Vivienda> data = viviendaService.buscarPorPropietario(user);
+        List<GetViviendasPropietarioDto> data = viviendaService.buscarPorPropietario(user.getId());
 
-
-        List<GetViviendasPropietarioDto> result =
-                data.stream()
-                        .map(dtoConverter::viviendasDePropietario)
-                        .collect(Collectors.toList());
-
-        return ResponseEntity.ok().body(result);
+        if(data.isEmpty()){
+            return ResponseEntity.notFound().build();
+        } else{
+            return ResponseEntity.ok().body(viviendaService.buscarPorPropietario(user.getId()));
+        }
 
     }
 }

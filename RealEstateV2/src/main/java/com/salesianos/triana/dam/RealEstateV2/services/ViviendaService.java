@@ -1,6 +1,7 @@
 package com.salesianos.triana.dam.RealEstateV2.services;
 
 
+import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetViviendasPropietarioDto;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
 import com.salesianos.triana.dam.RealEstateV2.repos.ViviendaRepository;
 import com.salesianos.triana.dam.RealEstateV2.services.base.BaseService;
@@ -22,8 +23,8 @@ import java.util.Optional;
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
 
-    public List<Vivienda> buscarPorPropietario(Usuario u) {
-        return repositorio.findByUsuario(u);
+    public List<GetViviendasPropietarioDto> buscarPorPropietario(Long id) {
+        return repositorio.findByUsuario(id);
     }
 
     public Page<Vivienda> findByArgs(final Optional<String> tipo,
