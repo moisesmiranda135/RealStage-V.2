@@ -1,8 +1,11 @@
 package com.salesianos.triana.dam.RealEstateV2.controller;
 
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.propietario.GetPropietarioViviendaDto;
+import com.salesianos.triana.dam.RealEstateV2.dto.propietario.PropietarioDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.DetailDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetDetailViviendaDto;
+import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.GetListViviendaDto;
 import com.salesianos.triana.dam.RealEstateV2.dto.vivienda.ListViviendaDtoConverter;
 import com.salesianos.triana.dam.RealEstateV2.model.Inmobiliaria;
 import com.salesianos.triana.dam.RealEstateV2.model.Vivienda;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -287,5 +291,25 @@ public class ViviendaController {
             return ResponseEntity.status(403).build();
         }
 
+    }
+
+
+    @GetMapping("/propietario")
+    public ResponseEntity<?> findViviendaPropietario(@AuthenticationPrincipal Usuario user) {
+
+        List<Vivienda> data = viviendaService.findAll();
+
+        if (data.isEmpty()) {
+            return ResponseEntity
+                    .noContent()
+                    .build();
+        } else {
+            List<GetListViviendaDto> result =
+                    data.stream()
+                            .map(dtoConverter::viviendaToGetViviendaDto)
+                            .collect(Collectors.toList());
+
+            return ResponseEntity.ok().body(result);
+        }
     }
 }
