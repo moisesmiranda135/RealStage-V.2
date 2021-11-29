@@ -44,4 +44,24 @@ public class ListViviendaDtoConverter {
                 .avatar_propietario(v.getUsuario() == null ? "Sin propietario" : v.getUsuario().getAvatar())
                 .build();
     }
+
+
+    public GetViviendasPropietarioDto viviendasDePropietario(Vivienda v){
+        return GetViviendasPropietarioDto
+                .builder()
+                .id(v.getId())
+                .titulo(v.getTitulo())
+                .avatar(v.getAvatar())
+                .codigoPostal(v.getCodigoPostal())
+                .provincia(v.getProvincia())
+                .tipo(v.getTipo())
+                .precio(v.getPrecio())
+                .numHabitaciones(v.getNumHabitaciones())
+                .metrosCuadrados(v.getMetrosCuadrados())
+                .numBanyos(v.getNumBanyos())
+                .tieneAscensor(v.isTieneAscensor())
+                .tieneGaraje(v.isTieneGaraje())
+                .tienePiscina(v.isTienePiscina())
+                .build();
+    }
 }

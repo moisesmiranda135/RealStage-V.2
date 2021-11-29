@@ -15,13 +15,16 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Optional;
 
 
 @Service
 public class ViviendaService extends BaseService<Vivienda, Long, ViviendaRepository> {
 
-
+    public List<Vivienda> buscarPorPropietario(Usuario u) {
+        return repositorio.findByUsuario(u);
+    }
 
     public Page<Vivienda> findByArgs(final Optional<String> tipo,
                                      final Optional<String> ciudad,
