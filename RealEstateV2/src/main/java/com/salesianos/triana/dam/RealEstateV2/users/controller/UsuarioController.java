@@ -20,6 +20,9 @@ public class UsuarioController {
     private final UsuarioService usuarioEntityService;
     private final UsuarioDtoConverter usuarioDtoConverter;
 
+
+    // TODO Seguro que estos tres métodos se pueden refactorizar para aprovechar el código
+
     @PostMapping("/auth/register/user")
     public ResponseEntity<GetUsuarioDto> nuevoPropietario(@RequestBody CreateUsuarioDto newUser) {
         Usuario saved = usuarioEntityService.save(newUser);

@@ -23,7 +23,7 @@ public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // TODO se sigue utilizando Long en lugar de UUID
 
     private String nombre;
     private String apellidos;
