@@ -251,7 +251,7 @@ public class ViviendaController {
                     content = @Content),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Vivienda> edit(@RequestBody Vivienda vivienda,
+    public ResponseEntity<GetDetailViviendaDto> edit(@RequestBody Vivienda vivienda,
                                          @Parameter(description = "ID de la vivienda a buscar")
                                          @PathVariable Long id,
                                          @AuthenticationPrincipal Usuario user) {
@@ -262,7 +262,6 @@ public class ViviendaController {
             return ResponseEntity.notFound().build();
         }else if (user.getRol().equals(Roles.ADMIN) ||
                 (user.getRol().equals(Roles.PROPIETARIO) && vivienda1.get().getUsuario().getId().equals(user.getId()))) {
-            return ResponseEntity.of(
                     viviendaService.findById(id).map(v -> {
                         v.setTitulo(vivienda.getTitulo());
                         v.setDescripcion(vivienda.getDescripcion());
@@ -281,9 +280,12 @@ public class ViviendaController {
                         v.setTieneAscensor(vivienda.isTieneAscensor());
                         v.setTieneGaraje(vivienda.isTieneGaraje());
                         viviendaService.save(v);
-                        return v;
-                    })
-            );
+                        return ResponseEntity.ok();
+                    });
+
+                return ResponseEntity
+                    .ok(detailDtoConverter.viviendaToGetViviendaDto(viviendaService.findById(id).get()));
+
         }else {
             return ResponseEntity.status(403).build();
         }
